@@ -14,7 +14,8 @@ library(tidyverse)
 library(readxl)
 
 # Read in GAINS data from Excel sheet 
-GAINS_data <- read_excel("~/Desktop/Nutley.etal_data.xlsx")
+# This is a generic path to the dataset. Make sure to edit this path accordingly.
+GAINS_data <- read_excel("./Nutley.etal_data.xlsx")
 
 ss_cor <- function(df){
     c <- 1-3/(4*df-1)

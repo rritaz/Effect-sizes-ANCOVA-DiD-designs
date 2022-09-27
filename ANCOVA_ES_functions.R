@@ -12,7 +12,8 @@ library(tidyverse)
 library(readxl)
 
 # Read in excel data in long format
-ANCOVA_data <- read_excel("~/Desktop/Sprenger.etal_data.xlsx")
+# Note this contains a generic path. Make sure to change accordingly. 
+ANCOVA_data <- read_excel("./Sprenger.etal_data.xlsx")
 
 ss_cor <- function(df){
     c <- 1-3/(4*df-1)

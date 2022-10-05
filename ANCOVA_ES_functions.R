@@ -64,7 +64,7 @@ gA1(mean_trt_adj = ANCOVA_data$adj_mean_trt, mean_ctrl_adj = ANCOVA_data$adj_mea
 # 0.4505042
 
 var_gA1(gA1 = 0.4505042, r = ANCOVA_data$r, n_trt = ANCOVA_data$n_trt, n_ctrl = ANCOVA_data$n_ctrl)
-# 0.01641186
+# 0.01771809
 
 ###-----------------------------------------------------------------###
 
@@ -84,10 +84,10 @@ var_gA2 <- function(gA2, r, n_trt, n_ctrl){
 gA2(mean_trt_adj = ANCOVA_data$adj_mean_trt, mean_ctrl_adj = ANCOVA_data$adj_mean_ctrl, 
     n_trt = ANCOVA_data$n_trt, n_ctrl = ANCOVA_data$n_ctrl, 
     t_adj = ANCOVA_data$t, r = ANCOVA_data$r)
-# 0.4450716
+# 0.4634488
 
-var_gA2(gA2 = 0.4450716, r = ANCOVA_data$r, n_trt = ANCOVA_data$n_trt, n_ctrl = ANCOVA_data$n_ctrl)
-# 0.01640631
+var_gA2(gA2 = 0.4634488, r = ANCOVA_data$r, n_trt = ANCOVA_data$n_trt, n_ctrl = ANCOVA_data$n_ctrl)
+# 0.01778913
 
 ###-----------------------------------------------------------------###
 
@@ -112,7 +112,7 @@ gPA(ANCOVA_data$adj_mean_trt, ANCOVA_data$adj_mean_ctrl,
 # 0.4464666
 
 var_gPA(gPA = 0.4464666, r = ANCOVA_data$r, n_trt = ANCOVA_data$n_trt, n_ctrl = ANCOVA_data$n_ctrl)
-# 0.01619913
+# 0.0174888
 
 ###-----------------------------------------------------------------###
 

@@ -3,18 +3,21 @@
 ###-----------------------------------------------------------------###
 ### Effect size estimators and their properties
 ###
-### This file contains the code used to conduct the simulation study in this paper
+### This file contains the code used to conduct the simulation study in 
+### main article.
 ###-----------------------------------------------------------------###
 ###-----------------------------------------------------------------###
 ###-----------------------------------------------------------------###
+
+# Load libraries
 library(MASS)
 library(tidyverse)
 
-# Create empty data frames for gains and ANCOVA
+# Create empty data frames for Gains and ANCOVA
 df_rho_cumulative_gains <- data.frame()
 df_rho_cumulative_ancova <- data.frame()
 
-# Vector of sample sizes considered - n
+# Vector of sample sizes
 n_vector <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
 
 for (j in 1:length(n_vector)){    
@@ -23,14 +26,13 @@ for (j in 1:length(n_vector)){
     df_rho_ancova <- data.frame()
     
     for (i in 1:10000){
-        ###-----------------------------------------------------------------###
-        ### Define values
+        # Define values
         rho <- 0.4
         theta <- 0.8
         q <- 1 # number of covariates
         iterations <- 10000 
-        ###-----------------------------------------------------------------###
-        #X & Y Treatment
+
+        # X & Y Treatment
         n_trt <- n_vector[j]
         mu_trt <-  c(0,0.9)
         sigma <- matrix(c(1,rho,rho,1), ncol=2)
@@ -41,8 +43,7 @@ for (j in 1:length(n_vector)){
         Ancova_sims <- A %>% as_tibble() %>%  mutate(treatment_indicator = rep(1, n_trt))
         colnames(Ancova_sims) <- c("x", "y", "treatment_indicator")
         
-        ###-----------------------------------------------------------------###
-        #X & Y Control
+        # X & Y Control
         n_ctrl <- n_vector[j]
         mu_ctrl <- c(0,0.1)
         sigma <- matrix(c(1,rho,rho,1), ncol=2)
@@ -53,7 +54,6 @@ for (j in 1:length(n_vector)){
         Bncova_sims <- B %>% as_tibble() %>%  mutate(treatment_indicator = rep(0, n_ctrl))
         colnames(Bncova_sims) <- c("x", "y", "treatment_indicator")
         
-        ###-----------------------------------------------------------------###
         # Store data
         trtANDctrl_df<- cbind(within_trt_data, within_ctrl_data) %>% as.data.frame() 
         ancova_df <- rbind(Ancova_sims,Bncova_sims) %>% 
@@ -61,7 +61,6 @@ for (j in 1:length(n_vector)){
                    x = scale(x, center = FALSE, scale = FALSE),
                    y = scale(y, center = FALSE, scale = FALSE))
         
-        ###-----------------------------------------------------------------###
         # Run ANCOVA
         ancova_mod <- lm(ancova_df$y ~ as.factor(ancova_df$treatment_indicator) + ancova_df$x)
         anc_mod_summary <- summary(ancova_mod)
@@ -69,11 +68,8 @@ for (j in 1:length(n_vector)){
         diffMeansAdjusted <- anc_mod_summary$coefficients[2,1]
         df_complete_ancova <- cbind(ancova_df, sd_adjusted) 
         colnames(df_complete_ancova) <- c("x", "y", "treatment_indicator", "sd_adjusted")
-        
-        ###-----------------------------------------------------------------###
-        ###-----------------------------------------------------------------###
-        
-        # long dataframe for GAINS
+                
+        # Long dataframe for GAINS
         df_gains <- trtANDctrl_df %>% 
             mutate(
                 diff_means_post = mean(y_trt-y_ctrl),
@@ -96,13 +92,11 @@ for (j in 1:length(n_vector)){
                 combo_UB_t1 = unbiased_t1+1.96*sqrt(v_1),
                 combo_in_CI_t1 = ifelse((theta >= combo_LB_t1 & theta <= combo_UB_t1), 1, 0),
                 
-                ###-----------------------------------------------------------------###
                 corr_pooled_trt = cov_trt/(sqrt(var(x_trt))*sqrt(var(y_trt))),
                 corr_pooled_ctrl = cov_ctrl/(sqrt(var(x_ctrl))*sqrt(var(y_ctrl))),
                 corr_pooled = (corr_pooled_trt+corr_pooled_ctrl)/2,
                 part1_in_estT5 = mean_diff_gains/sd_pooled,
                 part2_in_estT5 = sqrt(2*(1-corr_pooled)),
-                ###-----------------------------------------------------------------###
                 
                 # gG1
                 t_2 = (mean_diff_gains/sd_post),
@@ -130,9 +124,7 @@ for (j in 1:length(n_vector)){
                 combo_LB_t5_trueRho = unbiased_t5_trueRho-1.96*sqrt(v_5_trueRho),
                 combo_UB_t5_trueRho = unbiased_t5_trueRho+1.96*sqrt(v_5_trueRho),
                 combo_in_CI_t5_trueRho = ifelse((theta >= combo_LB_t5_trueRho & theta <= combo_UB_t5_trueRho), 1, 0),
-                
-                ###-----------------------------------------------------------------###
-                
+                                
                 # Pooled across trt and ctrl across pre and post
                 sPOOLED = sqrt((var(y_trt)+var(y_ctrl)+var(x_trt)+var(x_ctrl))/4),
                 
@@ -155,7 +147,7 @@ for (j in 1:length(n_vector)){
                 combo_in_CI_t11 = ifelse((theta >= combo_LB_t11 & theta <= combo_UB_t11), 1, 0),
             )
         
-        # long dataframe for ANCOVA
+        # Long dataframe for ANCOVA
         df_adjusted <- df_complete_ancova %>% 
             group_by(treatment_indicator) %>% 
             mutate(corr_sample = cor(x,y),
@@ -164,9 +156,7 @@ for (j in 1:length(n_vector)){
             ungroup() %>% 
             mutate(
                 sd_post_pooled = sqrt((var_post_group[1]+var_post_group[length(var_post_group)])/2),
-                
-                ###-----------------------------------------------------------------###
-                
+                                
                 # gA1
                 t_3 = diffMeansAdjusted/sd_post_pooled,
                 unbiased_t3 = (1-(3/(4*(n_trt+n_ctrl-2)-1)))*diffMeansAdjusted/sd_post_pooled,
@@ -212,9 +202,7 @@ for (j in 1:length(n_vector)){
                 combo_UB_t12 = unbiased_t12+1.96*sqrt(v_12),
                 combo_in_CI_t12 = ifelse((theta >= combo_LB_t12 & theta <= combo_UB_t12), 1, 0)
             )
-        
-        ###-----------------------------------------------------------------###
-        
+                
         # Clean dataframe ANCOVA
         df_current_ancova <- df_adjusted %>% 
             select(-c(x, y, treatment_indicator, corr_sample)) %>% 
@@ -289,9 +277,7 @@ for (j in 1:length(n_vector)){
         ) 
     
     df_rho_cumulative_gains <- rbind(df_rho_cumulative_gains, df_rho_gains)
-    
-    ###-----------------------------------------------------------------###
-    
+        
     # ANCOVA
     df_rho_ancova <- df_rho_ancova %>% 
         mutate(

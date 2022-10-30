@@ -34,8 +34,6 @@ var_g <- function(g, n_trt, n_ctrl){
     return(var_g)
 } # function to compute var_g
 
-# DEMONSTRATION WITH NUTLEY DATA
-
 g(mean_trt = ANCOVA_data$post_mean_trt, mean_ctrl = ANCOVA_data$post_mean_ctrl,
   n_trt = ANCOVA_data$n_trt, n_ctrl = ANCOVA_data$n_ctrl, 
   post_sd_trt = ANCOVA_data$post_sd_trt, post_sd_ctrl = ANCOVA_data$post_sd_ctrl)

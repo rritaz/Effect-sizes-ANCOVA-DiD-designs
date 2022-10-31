@@ -1,13 +1,15 @@
 ###-----------------------------------------------------------------###
 ###-----------------------------------------------------------------###
 ###-----------------------------------------------------------------###
-### ANCOVA Effect size estimators 
+### ANCOVA effect size estimators 
 ###
 ### This file contains the functions one can use to compute the effect 
 ### size estimates and their variances 
 ###-----------------------------------------------------------------###
 ###-----------------------------------------------------------------###
 ###-----------------------------------------------------------------###
+
+# Load libraries
 library(tidyverse)
 library(readxl)
 
@@ -21,6 +23,7 @@ ss_cor <- function(df){
 } # function to compute small sample correction factor with df degrees of freedom
 
 ###-----------------------------------------------------------------###
+
 g <- function(mean_trt, mean_ctrl, n_trt, n_ctrl, post_sd_trt, post_sd_ctrl){
     diff_means = mean_trt - mean_ctrl
     s_y = sqrt(((n_trt-1)*post_sd_trt^2 + (n_ctrl-1)*post_sd_ctrl^2)/(n_trt+n_ctrl-2))
@@ -34,8 +37,6 @@ var_g <- function(g, n_trt, n_ctrl){
     return(var_g)
 } # function to compute var_g
 
-# DEMONSTRATION WITH NUTLEY DATA
-
 g(mean_trt = ANCOVA_data$post_mean_trt, mean_ctrl = ANCOVA_data$post_mean_ctrl,
   n_trt = ANCOVA_data$n_trt, n_ctrl = ANCOVA_data$n_ctrl, 
   post_sd_trt = ANCOVA_data$post_sd_trt, post_sd_ctrl = ANCOVA_data$post_sd_ctrl)
@@ -45,6 +46,7 @@ var_g(g = 0.608554, n_trt = ANCOVA_data$n_trt, n_ctrl = ANCOVA_data$n_ctrl)
 # 0.03709139
 
 ###-----------------------------------------------------------------###
+
 gA1 <- function(mean_trt_adj, mean_ctrl_adj, n_trt, n_ctrl, post_sd_trt, post_sd_ctrl){
     diff_adj_means = mean_trt_adj - mean_ctrl_adj
     s_y = sqrt(((n_trt-1)*post_sd_trt^2 + (n_ctrl-1)*post_sd_ctrl^2)/(n_trt+n_ctrl-2))

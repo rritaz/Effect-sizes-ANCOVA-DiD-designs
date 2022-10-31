@@ -1,7 +1,7 @@
 ###-----------------------------------------------------------------###
 ###-----------------------------------------------------------------###
 ###-----------------------------------------------------------------###
-### GAINS Effect size estimators 
+### GAINS effect size estimators 
 ###
 ### This file contains the functions one can use to compute the effect 
 ### size estimates and their variances 
@@ -24,6 +24,7 @@ ss_cor <- function(df){
 } # function to compute small sample correction factor with df degrees of freedom
 
 ###-----------------------------------------------------------------###
+
 g <- function(mean_trt, mean_ctrl, n_trt, n_ctrl, post_sd_trt, post_sd_ctrl){
     diff_means = mean_trt - mean_ctrl
     s_y = sqrt(((n_trt-1)*post_sd_trt^2 + (n_ctrl-1)*post_sd_ctrl^2)/(n_trt+n_ctrl-2))
@@ -37,8 +38,6 @@ var_g <- function(g, n_trt, n_ctrl){
     return(var_g)
 } # function to compute var_g
 
-# DEMONSTRATION WITH NUTLEY DATA
-
 g(mean_trt = GAINS_data$post_mean_trt, mean_ctrl = GAINS_data$post_mean_ctrl,
   n_trt = GAINS_data$n_trt, n_ctrl = GAINS_data$n_ctrl, 
   post_sd_trt = GAINS_data$post_sd_trt, post_sd_ctrl = GAINS_data$post_sd_ctrl)
@@ -48,6 +47,7 @@ var_g(g = 1.560662, n_trt = GAINS_data$n_trt, n_ctrl = GAINS_data$n_ctrl)
 # 0.107578
 
 ###-----------------------------------------------------------------###
+
 gG1 <- function(gains_mean_trt, gains_mean_ctrl, n_trt, n_ctrl, post_sd_trt, post_sd_ctrl){
     diff_gain_means = gains_mean_trt - gains_mean_ctrl
     s_y = sqrt(((n_trt-1)*post_sd_trt^2 + (n_ctrl-1)*post_sd_ctrl^2)/(n_trt+n_ctrl-2))
@@ -60,8 +60,6 @@ var_gG1 <- function(gG1, r, n_trt, n_ctrl){
     var_gG1 = ((2*(1-r))/n_tilda)+((gG1^2)/(2*(n_trt+n_ctrl-2)))
     return(var_gG1)
 } # function to compute var_gG1
-
-# DEMONSTRATION WITH NUTLEY DATA
 
 gG1(gains_mean_trt = GAINS_data$gains_mean_trt, gains_mean_ctrl = GAINS_data$gains_mean_ctrl, 
     n_trt = GAINS_data$n_trt, n_ctrl = GAINS_data$n_ctrl, 
@@ -85,8 +83,6 @@ var_gG2 <- function(gG2, r, n_trt, n_ctrl){
     var_gG2 = ((2*(1-r))/n_tilda)+((gG2^2)/(2*(n_trt+n_ctrl-2)))
     return(var_gG2)
 } # function to compute var_gG2
-
-# DEMONSTRATION WITH NUTLEY DATA
 
 gG2(gains_mean_trt = GAINS_data$gains_mean_trt, gains_mean_ctrl = GAINS_data$gains_mean_ctrl, 
     n_trt = GAINS_data$n_trt, n_ctrl = GAINS_data$n_ctrl, 
@@ -113,8 +109,6 @@ var_gPG <- function(gPG, r, n_trt, n_ctrl){
     var_gPG = ((2*(1-r))/n_tilda)+((gPG^2)/(4*(n_trt+n_ctrl-2)))
     return(var_gPG)
 } # function to compute var_gPG
-
-# DEMONSTRATION WITH NUTLEY DATA
 
 gPG(gains_mean_trt = GAINS_data$gains_mean_trt, gains_mean_ctrl = GAINS_data$gains_mean_ctrl, 
     n_trt = GAINS_data$n_trt, n_ctrl = GAINS_data$n_ctrl, 
